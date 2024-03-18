@@ -16,9 +16,9 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('App\Models\GlobalSettings', function ($app) {
-            return new GlobalSettings(SettingModel::all());
-        });
+        // $this->app->singleton('App\Models\GlobalSettings', function ($app) {
+        //     return new GlobalSettings(SettingModel::all());
+        // });
     }
 
     /**
@@ -28,6 +28,6 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot(GlobalSettings $settinsInstance)
     {
-        View::share('globalsettings', $settinsInstance);
+        // View::share('globalsettings', $settinsInstance);
     }
 }
