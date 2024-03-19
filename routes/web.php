@@ -83,7 +83,9 @@ Route::prefix('admin')->group(function(){
     });
 
 });
-
+Route::get('key:generate', function () {
+    Artisan::call("key:generate");
+});
 Route::get('site-optimize', function () {
     Artisan::call("optimize");
 });
