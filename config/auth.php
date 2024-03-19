@@ -78,7 +78,7 @@ return [
 
         'api-provider' => [
             'driver' => 'eloquent',
-            'model' => App\Models\UserStartUpModel::class,
+            'model' => App\Models\UserApiModel::class,
         ],
 
         'admins' => [

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_admin', function (Blueprint $table) {
             $table->id();
-            $table->integer('role')->comment('0 superadmin, 1 admin');
+            $table->integer('role')->comment('0 admin, 1 user');
             $table->text('name');
             $table->text('username');
             $table->string('mobile',10);

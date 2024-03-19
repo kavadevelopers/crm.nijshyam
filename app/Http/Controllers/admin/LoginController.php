@@ -53,7 +53,7 @@ class LoginController extends Controller
     }
 
     public function login(Request $rec) : Response{
-        $user = UserAdminModel::where('username',$rec->user)->where('is_deleted','')->first();
+        $user = UserAdminModel::where('username',$rec->user)->where('is_deleted','0')->where('role','0')->first();
         if($user){
             if (password_verify($rec->pass, $user->password)) {
                 if(Auth::guard('admin')->attempt(['username' => $rec->user,'password' => $rec->pass])){

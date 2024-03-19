@@ -34,6 +34,6 @@ Shuru new product for captable management only apis and admin in this project
 
 <p>Default superadmin login</p>
 <ul>
-    <li><strong>Username :</strong> shuruup</li>
-    <li><strong>Password :</strong> Shuru@123</li>
+    <li><strong>Username :</strong> nijshyam</li>
+    <li><strong>Password :</strong> Admin@123</li>
 </ul>

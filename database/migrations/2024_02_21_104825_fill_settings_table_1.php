@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         $data = [
-            ['item' => 'app_name', 'value' => 'Shuruup-Captable'],
+            ['item' => 'app_name', 'value' => 'CRM NijShyam'],
             ['item' => 'smtp_mail_send_from', 'value' => ''],
             ['item' => 'smtp_mail_send_from_name', 'value' => ''],
             ['item' => 'smtp_mail_host', 'value' => ''],
