@@ -103,7 +103,7 @@ class CommonHelper{
         }
     }
 
-    public static function isColValue($val) {
+    public static function isColValue($val) :string{
         if ($val && $val != NULL && $val != "") {
             return $val;
         }else{
@@ -111,6 +111,8 @@ class CommonHelper{
         }
     }
 
-
+    public static function generateLeadId($val) :string{
+        return "NIJ_0".$val;
+    }
 }
 

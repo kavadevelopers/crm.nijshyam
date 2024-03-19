@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\SettingsController;
 use App\Models\StartupModel;
 use App\Models\UserStartUpModel;
 use App\Models\ZApiTokenModel;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -35,23 +36,6 @@ Route::get('generate-bearer-token', function () {
     return $token;
 });
 
-Route::get('generate-startup-user', function () {
-
-    $startup = new StartupModel;
-    $startup->brand_name = 'Test Brand name';
-    $startup->legal_name = 'Test legal_name';
-    $startup->save();
-
-    $user = new UserStartUpModel;
-    $user->startup_id = $startup->id;
-    $user->name = 'Mehul Kava';
-    $user->mobile = '9898375981';
-    $user->password = Hash::make('Shuru@123');
-    $user->email = 'mehul9921@gmail.com';
-    $user->save();
-
-});
-
 Route::prefix('admin')->group(function(){
 
     Route::group(['middleware' => ['isGuest']],function(){
@@ -68,58 +52,22 @@ Route::prefix('admin')->group(function(){
         Route::get('/dashboard', [DashboardController::class,'index']);
 
         Route::prefix('master')->group(function(){
-            Route::prefix('sectors')->group(function(){
-                Route::get('', [MasterController::class,'sectors']);
-                Route::get('edit/{id}', [MasterController::class,'sectorsEdit']);
-                Route::get('delete/{id}', [MasterController::class,'sectorsDelete']);
+            Route::prefix('products')->group(function(){
+                Route::get('', [MasterController::class,'products']);
+                Route::get('edit/{id}', [MasterController::class,'productsEdit']);
+                Route::get('delete/{id}', [MasterController::class,'productsDelete']);
 
-                Route::post('save', [MasterController::class,'sectorsSave']);
-                Route::post('update', [MasterController::class,'sectorsUpdate']);
+                Route::post('save', [MasterController::class,'productsSave']);
+                Route::post('update', [MasterController::class,'productsUpdate']);
             });
 
-            Route::prefix('investortype')->group(function(){
-                Route::get('', [MasterController::class,'investorType']);
-                Route::get('edit/{id}', [MasterController::class,'investorTypeEdit']);
-                Route::get('delete/{id}', [MasterController::class,'investorTypeDelete']);
+            Route::prefix('source')->group(function(){
+                Route::get('', [MasterController::class,'source']);
+                Route::get('edit/{id}', [MasterController::class,'sourceEdit']);
+                Route::get('delete/{id}', [MasterController::class,'sourceDelete']);
 
-                Route::post('save', [MasterController::class,'investorTypeSave']);
-                Route::post('update', [MasterController::class,'investorTypeUpdate']);
-            });
-
-            Route::prefix('instrument-type')->group(function(){
-                Route::get('', [MasterController::class,'instrumentType']);
-                Route::get('edit/{id}', [MasterController::class,'instrumentTypeEdit']);
-                Route::get('delete/{id}', [MasterController::class,'instrumentTypeDelete']);
-
-                Route::post('save', [MasterController::class,'instrumentTypeSave']);
-                Route::post('update', [MasterController::class,'instrumentTypeUpdate']);
-            });
-
-            Route::prefix('country')->group(function(){
-                Route::get('', [MasterController::class,'country']);
-                Route::get('edit/{id}', [MasterController::class,'countryEdit']);
-                Route::get('delete/{id}', [MasterController::class,'countryDelete']);
-
-                Route::post('save', [MasterController::class,'countrySave']);
-                Route::post('update', [MasterController::class,'countryUpdate']);
-            });
-
-            Route::prefix('state')->group(function(){
-                Route::get('', [MasterController::class,'state']);
-                Route::get('edit/{id}', [MasterController::class,'stateEdit']);
-                Route::get('delete/{id}', [MasterController::class,'stateDelete']);
-
-                Route::post('save', [MasterController::class,'stateSave']);
-                Route::post('update', [MasterController::class,'stateUpdate']);
-            });
-
-            Route::prefix('city')->group(function(){
-                Route::get('', [MasterController::class,'city']);
-                Route::get('edit/{id}', [MasterController::class,'cityEdit']);
-                Route::get('delete/{id}', [MasterController::class,'cityDelete']);
-
-                Route::post('save', [MasterController::class,'citySave']);
-                Route::post('update', [MasterController::class,'cityUpdate']);
+                Route::post('save', [MasterController::class,'sourceSave']);
+                Route::post('update', [MasterController::class,'sourceUpdate']);
             });
         });
 
@@ -134,4 +82,18 @@ Route::prefix('admin')->group(function(){
         });
     });
 
+});
+
+Route::get('site-optimize', function () {
+    Artisan::call("optimize");
+});
+Route::get('site-optimize-clear', function () {
+    Artisan::call("optimize:clear");
+});
+Route::get('storage-generate', function () {
+    Artisan::call("storage:link");
+});
+
+Route::get('db-migration', function () {
+    Artisan::call("migrate");
 });

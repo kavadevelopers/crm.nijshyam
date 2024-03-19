@@ -2,6 +2,8 @@
 
 use App\Helpers\CommonHelper;
 use App\Http\Controllers\api\v1\AuthController as ApiAuthController;
+use App\Http\Controllers\api\v1\ConfigController as ApiConfigController;
+use App\Http\Controllers\api\v1\user\LeadController as ApiLeadController;
 use App\Http\Controllers\api\v1\user\UserController as ApiUserController;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +37,10 @@ Route::middleware('auth.api.token')->group(function(){
         Route::middleware('auth:api-guard')->group(function(){
             Route::get('profile',[ApiUserController::class,'getUser']); 
 
+            Route::prefix('leads')->group(function(){
+                Route::post('create', [ApiLeadController::class,'create']);
+                Route::get('list', [ApiLeadController::class,'list']);
+            });
 
             Route::post('logout',[ApiUserController::class,'logout']);   
         });  
@@ -73,6 +79,6 @@ Route::middleware('auth.api.token')->group(function(){
         //         route::get('',[ApiMasterController::class,'cityList']);
         //     });
         // });
-        // Route::get('get-config',[ConfigController::class,'get']);
+        Route::get('get-config',[ApiConfigController::class,'get']);
     });
 });

@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
             $table->enum('priority',['High','Medium','Low'])->default('Medium');
-            $table->text('status_id')->nullable();
             $table->text('source_id')->nullable();
-            $table->text('lead_id')->nullable();
             $table->text('product_id')->nullable();
+            $table->text('lead_id')->nullable();
             $table->text('name');
             $table->text('mobile')->nullable();
             $table->text('email')->nullable();
@@ -25,6 +24,9 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->text('description')->nullable();
             $table->date('follow_up_date')->nullable();
+            $table->text('status')->nullable();
+            $table->text('created_by')->nullable();
+            $table->text('updated_by')->nullable();
             $table->timestamps();
         });
     }
