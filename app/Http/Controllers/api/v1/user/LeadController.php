@@ -158,7 +158,6 @@ class LeadController extends Controller{
                     $lead->follow_up_date   = Carbon::parse($request->follow_up_date)->format('Y-m-d');
                 }
                 $lead->status           = $request->status;
-                $lead->created_by       = Auth::guard('api-guard')->user()->id;
                 $lead->updated_by       = Auth::guard('api-guard')->user()->id;
                 $lead->save();   
                 
