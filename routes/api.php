@@ -38,7 +38,9 @@ Route::middleware('auth.api.token')->group(function(){
             Route::get('profile',[ApiUserController::class,'getUser']); 
 
             Route::prefix('leads')->group(function(){
+                Route::post('followup', [ApiLeadController::class,'followup']);
                 Route::post('create', [ApiLeadController::class,'create']);
+                Route::post('update', [ApiLeadController::class,'update']);
                 Route::get('list', [ApiLeadController::class,'list']);
             });
 

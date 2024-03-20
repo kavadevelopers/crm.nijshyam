@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,15 @@ class LeadsModel extends Model
         return $this->belongsTo(MasterProductModel::class, 'product_id');
     }
 
+    public function lastfollowup(){
+        return $this->hasOne(FollowUpModel::class, 'lead_id')->latest();
+    }
+
+    public function followups(){
+        return $this->hasMany(FollowUpModel::class, 'lead_id')->latest();
+    }
+
+    protected $appends = ['entry_date'];
     protected $table = 'leads';
     
     protected $fillable = [
@@ -42,4 +52,8 @@ class LeadsModel extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function getEntryDateAttribute(){
+        return Carbon::parse($this->created_at)->format('d M Y H:i A');
+    }
 }
