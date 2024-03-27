@@ -68,7 +68,6 @@ class LeadController extends Controller{
             if($request->take){
                 $leads->take($request->take);
             }
-            $leads = $leads->get();
             return CommonHelper::response('1',[
                 'message'   => 'Lead List',
                 'data'      => [
