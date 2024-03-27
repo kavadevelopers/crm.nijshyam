@@ -35,6 +35,8 @@ Route::middleware('auth.api.token')->group(function(){
         Route::post('login',[ApiAuthController::class,'login']); 
         
         Route::middleware('auth:api-guard')->group(function(){
+
+            Route::get('followup', [ApiUserController::class,'followup']);
             Route::get('profile',[ApiUserController::class,'getUser']); 
 
             Route::prefix('leads')->group(function(){
@@ -42,6 +44,7 @@ Route::middleware('auth.api.token')->group(function(){
                 Route::post('create', [ApiLeadController::class,'create']);
                 Route::post('update', [ApiLeadController::class,'update']);
                 Route::get('list', [ApiLeadController::class,'list']);
+
             });
 
             Route::post('logout',[ApiUserController::class,'logout']);   

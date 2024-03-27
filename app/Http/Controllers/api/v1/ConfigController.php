@@ -26,7 +26,8 @@ class ConfigController extends Controller
         // $getconfig['s3-baseurl'] = $S3baseUrl;
         $getconfig['products'] = MasterProductModel::where('is_deleted','0')->orderby('order','asc')->get();
         $getconfig['source'] = MasterSourceModel::where('is_deleted','0')->orderby('order','asc')->get();
-        $getconfig['status'] = ['New','Active','Customer','Deleted'];
+        // $getconfig['status'] = ['New','Active','Customer','Deleted'];
+        $getconfig['status'] = ['Active','Customer','Deleted'];
 
         return CommonHelper::response('1',[
             'message' => 'Config Data',

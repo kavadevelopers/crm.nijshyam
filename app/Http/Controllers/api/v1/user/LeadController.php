@@ -58,19 +58,23 @@ class LeadController extends Controller{
             ]);
         }else{
             $leads = LeadsModel::orderby('id','asc')->with('source','product','lastfollowup');
+            if($request->status){
+                $leads->where('status',$request->status);
+            }
+            $total = $leads->count();
             if($request->skip){
                 $leads->skip($request->skip);
             }
             if($request->take){
                 $leads->take($request->take);
             }
-            if($request->status){
-                $leads->where('status',$request->status);
-            }
             $leads = $leads->get();
             return CommonHelper::response('1',[
                 'message'   => 'Lead List',
-                'data'      => $leads,
+                'data'      => [
+                    'total'     => $total,
+                    'list'      => $leads->get()
+                ],
                 'note'      => 'Pass take if you want to `take` records and `skip` for skip records'
             ]);
         }
