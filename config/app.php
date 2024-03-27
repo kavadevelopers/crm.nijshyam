@@ -186,13 +186,8 @@ return [
         // 'Example' => App\Facades\Example::class,
 
         'CommonHelper'      => App\Helpers\CommonHelper::class,
-        'AwsS3Helper'      => App\Helpers\AwsS3Helper::class,
-        'FilePathHelper'    => App\Helpers\FilePathHelper::class,
-        'FileUploadHelper'  => App\Helpers\FileUploadHelper::class,
-        'DocumentHelper'  => App\Helpers\DocumentHelper::class,
-        'NotifyWpHelper'  => App\Helpers\NotifyWpHelper::class,
-        'AdminHelper'  => App\Helpers\AdminHelper::class,
-        'NotifySmSHelper'  => App\Helpers\NotifySmSHelper::class,
+        'DateTimeHelper'      => App\Helpers\DateTimeHelper::class,
+        'AdminHelper'      => App\Helpers\AdminHelper::class,
         'NotifyEmailHelper'  => App\Helpers\NotifyEmailHelper::class,
     ])->toArray(),
 

@@ -61,6 +61,12 @@
                             </ul>
                         </li>
                     </ul>
+                    <li class="{{ AdminHelper::menu(2,['users'])[2] }}">
+                        <a href="{{ CommonHelper::admin('users') }}">
+                            <span class="pcoded-micon"><i class="fa fa-users"></i></span>
+                            <span class="pcoded-mtext">Users</span>
+                        </a>
+                    </li>
                     @if (Auth::guard('admin')->user()->id == '1')
                         <li class="{{ AdminHelper::menu(2,['settings'])[2] }}">
                             <a href="{{ CommonHelper::admin('settings') }}">

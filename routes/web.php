@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\MasterController;
 use App\Http\Controllers\admin\SettingsController;
+use App\Http\Controllers\admin\UserController;
 use App\Models\StartupModel;
 use App\Models\UserStartUpModel;
 use App\Models\ZApiTokenModel;
@@ -69,6 +70,18 @@ Route::prefix('admin')->group(function(){
                 Route::post('save', [MasterController::class,'sourceSave']);
                 Route::post('update', [MasterController::class,'sourceUpdate']);
             });
+        });
+
+        // Common Routes
+        Route::prefix('users')->group(function(){
+            Route::get('', [UserController::class,'index']);
+            Route::get('create', [UserController::class,'create']);
+            Route::get('edit/{id}', [UserController::class,'edit']);
+            Route::get('delete/{id}', [UserController::class,'delete']);
+            Route::get('status/{id}/{status}', [UserController::class,'status']);
+            
+            Route::post('create', [UserController::class,'save']);
+            Route::post('edit', [UserController::class,'update']);
         });
 
         Route::prefix('settings')->group(function(){

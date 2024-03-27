@@ -79,22 +79,6 @@ class CommonHelper{
         }
     }
 
-    public static function getSectorIcon($file):string{
-        return 'https://shuruup-captable.s3.ap-south-1.amazonaws.com/'.$file;
-    }
-
-    public static function sendVerificationCodeToSMS($userid,$usertype,$otptype,$mobile) : void {
-        $code = self::generateOTP();
-        VerificationCodeModel::create([
-            'user_id'       => $userid,
-            'user_type'     => $usertype,
-            'code_type'     => $otptype,
-            'code'          => $code,
-            'expired_at'    => DateTimeHelper::otpExpired()
-        ]);
-        NotifySmSHelper::sendVerification($code,$mobile);
-    }
-
     public static function generateOTP($length = 6) :string{
         if($length == '4'){
             return mt_rand(1111,9999);

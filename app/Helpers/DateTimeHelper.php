@@ -12,4 +12,16 @@ class DateTimeHelper{
             return Carbon::parse(date('Y-m-d H:i:s'))->addMinutes(10)->format('Y-m-d H:i:s');
         }
     }
+
+    public static function vcat($item){
+        return Carbon::parse($item)->format('d M Y h:i A');
+    }
+
+    public static function vdate($item){
+        if ($item != "" || $item != NULL) {
+            return Carbon::parse($item)->format('d-m-Y');
+        }else{
+            return NULL;
+        }
+    }
 }
