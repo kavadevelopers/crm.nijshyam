@@ -32,9 +32,12 @@ class LeadController extends Controller{
                 $followup->created_by       = Auth::guard('api-guard')->user()->id;
                 $followup->updated_by       = Auth::guard('api-guard')->user()->id;
                 $followup->save(); 
-
-                if($request->follow_up_date){
-                    $lead->follow_up_date   = Carbon::parse($request->follow_up_date)->format('Y-m-d');
+                if($lead->status == 'Active'){
+                    if($request->follow_up_date){
+                        $lead->follow_up_date   = Carbon::parse($request->follow_up_date)->format('Y-m-d');
+                    }
+                }else{
+                    $lead->follow_up_date = NULL;
                 }
                 $lead->status           = $request->status;
                 $lead->updated_by       = Auth::guard('api-guard')->user()->id;
