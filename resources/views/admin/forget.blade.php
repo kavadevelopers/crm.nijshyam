@@ -11,7 +11,14 @@
     <meta name="description" content="">
     <meta name="author" content="#">
     <!-- Favicon icon -->
-    <link rel="icon" href="{{ url('themes/logos/favicon.png') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="headers/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="headers/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="headers/favicon-16x16.png">
+    <link rel="manifest" href="headers/site.webmanifest">
+    <link rel="mask-icon" href="headers/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    
     <script type="text/javascript" src="{{ url('themes/admin/bower_components/jquery/js/jquery.min.js') }}"></script>
     <!-- Google font--><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet">
     <!-- Required Fremwork -->

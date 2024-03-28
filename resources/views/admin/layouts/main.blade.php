@@ -148,7 +148,7 @@
                             <i class="feather icon-menu"></i>
                         </a>
                         <a href="{{ url(CommonHelper::admin('dashboard')) }}">
-                            <img class="img-fluid" src="{{ url('themes/logos/logo-long.png') }}" alt="Theme-Logo">
+                            <img class="img-fluid" src="{{ url('themes/logos/logo-tp.png') }}" alt="Theme-Logo">
                         </a>
                         <a class="mobile-options">
                             <i class="feather icon-more-horizontal"></i>
