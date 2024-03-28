@@ -6,6 +6,7 @@ use App\Helpers\CommonHelper;
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeModel;
 use App\Models\LeadsModel;
+use App\Models\UserAdminModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +45,19 @@ class UserController extends Controller{
         return CommonHelper::response(1,[
             'message' => 'Logout Done'
         ]);
-    }    
-
+    }  
     
+    public function acDelete(Request $request){
+
+        $user = UserAdminModel::find($request->user()->id);
+        if($user){
+            $user->is_deleted = '1';
+            $user->save();
+        }
+
+        $request->user()->currentAccessToken()->delete();
+        return CommonHelper::response(1,[
+            'message' => 'Your Account is Deleted'
+        ]);
+    }
 }

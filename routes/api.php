@@ -48,6 +48,7 @@ Route::middleware('auth.api.token')->group(function(){
             });
 
             Route::post('logout',[ApiUserController::class,'logout']);   
+            Route::post('ac-delete',[ApiUserController::class,'acDelete']);   
         });  
 
         // Route::prefix('master')->group(function(){

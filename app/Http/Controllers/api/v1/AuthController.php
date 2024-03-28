@@ -25,8 +25,7 @@ class AuthController extends Controller{
         }else if(!$request->password){
             return CommonHelper::response('0',['message' => '`password` is reqiured.']);
         }else{
-            $user = UserApiModel::where('username',$request->username)->where('is_deleted','0')->first();
-
+            $user = UserApiModel::where('username',$request->username)->where('is_deleted','0')->where('role','1')->first();
             if(!$user){
                 return CommonHelper::response('0',['message' => '`username` not registered']);
             }else{
