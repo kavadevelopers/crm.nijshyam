@@ -26,7 +26,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('admin');
 });
 
 Route::get('generate-bearer-token', function () {
@@ -50,7 +50,7 @@ Route::prefix('admin')->group(function(){
 
     Route::group(['middleware' => ['isAdmin']],function(){
 
-        Route::get('/dashboard', [DashboardController::class,'index']);
+        Route::get('dashboard', [DashboardController::class,'index']);
 
         Route::prefix('master')->group(function(){
             Route::prefix('products')->group(function(){
@@ -93,6 +93,8 @@ Route::prefix('admin')->group(function(){
             Route::get('', [SettingsController::class,'profile']);
             Route::post('save', [SettingsController::class,'profileSave']);
         });
+
+        Route::get('logout', [LoginController::class,'logout']);
     });
 
 });
