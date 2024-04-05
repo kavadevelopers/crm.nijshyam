@@ -15,17 +15,11 @@ class UserController extends Controller{
 
     public function followup(Request $request) : Response {
         $leads = LeadsModel::where('follow_up_date','!=',NULL)->where('status','Active')->orderby('follow_up_date','asc')->with('source','product','lastfollowup');
-        if($request->name){
-            $leads->where('name', 'like', "%$request->name%");
-        }
-        if($request->mobile){
-            $leads->where('mobile', 'like', "%$request->mobile%");
-        }
-        if($request->city){
-            $leads->where('city', 'like', "%$request->city%");
-        }
-        if($request->address){
-            $leads->where('address', 'like', "%$request->address%");
+        if($request->query){
+            $leads->where('name', 'like', "%$request->query%")
+                    ->orWhere('mobile', 'like', "%$request->query%")
+                    ->orWhere('city', 'like', "%$request->query%")
+                    ->orWhere('address', 'like', "%$request->query%");
         }
         if($request->priority){
             $leads->where('priority',$request->priority);
