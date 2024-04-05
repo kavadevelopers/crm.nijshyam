@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller{
 
     public function followup(Request $request) : Response {
-        $leads = LeadsModel::where('follow_up_date','!=',NULL)->orderby('follow_up_date','asc')->with('source','product','lastfollowup');
+        $leads = LeadsModel::where('follow_up_date','!=',NULL)->where('status','Active')->orderby('follow_up_date','asc')->with('source','product','lastfollowup');
         if($request->name){
             $leads->where('name', 'like', "%$request->name%");
         }
