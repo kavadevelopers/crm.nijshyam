@@ -64,6 +64,27 @@ class LeadController extends Controller{
             if($request->status){
                 $leads->where('status',$request->status);
             }
+            if($request->name){
+                $leads->where('name', 'like', "%$request->name%");
+            }
+            if($request->mobile){
+                $leads->where('mobile', 'like', "%$request->mobile%");
+            }
+            if($request->city){
+                $leads->where('city', 'like', "%$request->city%");
+            }
+            if($request->address){
+                $leads->where('address', 'like', "%$request->address%");
+            }
+            if($request->priority){
+                $leads->where('priority',$request->priority);
+            }
+            if($request->source_id){
+                $leads->where('source_id',$request->source_id);
+            }
+            if($request->product_id){
+                $leads->where('product_id',$request->product_id);
+            }
             $total = $leads->count();
             if($request->skip){
                 $leads->skip($request->skip);
@@ -71,6 +92,7 @@ class LeadController extends Controller{
             if($request->take){
                 $leads->take($request->take);
             }
+            
             return CommonHelper::response('1',[
                 'message'   => 'Lead List',
                 'data'      => [
