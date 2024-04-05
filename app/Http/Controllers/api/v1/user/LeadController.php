@@ -65,10 +65,10 @@ class LeadController extends Controller{
                 $leads->where('status',$request->status);
             }
             if($request->query){
-                $leads->where('name', 'like', "%".$request->query."%")
-                    ->orWhere('mobile', 'like', "%".$request->query."%")
-                    ->orWhere('city', 'like', "%".$request->query."%")
-                    ->orWhere('address', 'like', "%".$request->query."%");
+                $leads->where('name', 'like', "%".$request->search."%")
+                    ->orWhere('mobile', 'like', "%".$request->search."%")
+                    ->orWhere('city', 'like', "%".$request->search."%")
+                    ->orWhere('address', 'like', "%".$request->search."%");
             }
             if($request->priority){
                 $leads->where('priority',$request->priority);
