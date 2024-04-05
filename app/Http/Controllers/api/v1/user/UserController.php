@@ -15,8 +15,11 @@ class UserController extends Controller{
 
     public function followup(Request $request) : Response {
         $leads = LeadsModel::where('follow_up_date','!=',NULL)->where('status','Active')->orderby('follow_up_date','asc')->with('source','product','lastfollowup');
-        if($request->query){
-            $leads->where('name', 'like', "%".$request->query."%");
+        if($request->search){
+            $leads->where('name', 'like', "%".$request->search."%")
+                    ->orWhere('mobile', 'like', "%".$request->search."%")
+                    ->orWhere('city', 'like', "%".$request->search."%")
+                    ->orWhere('address', 'like', "%".$request->search."%");
         }
         if($request->priority){
             $leads->where('priority',$request->priority);
