@@ -37,7 +37,7 @@
                                     <td>{{ $value->mobile }}</td>
                                     <td>
                                         {{ $value->city }}<br />
-                                        {{ $value->address }}
+                                        - {{ $value->address }}
                                     </td>
                                     <td>
                                         {{ $value->product->name }}
