@@ -37,66 +37,71 @@ Route::get('generate-bearer-token', function () {
     return $token;
 });
 
-Route::prefix('admin')->group(function(){
+Route::prefix('admin')->group(function () {
 
-    Route::group(['middleware' => ['isGuest']],function(){
-        Route::get('', [LoginController::class,'index']);
-        Route::get('/login', [LoginController::class,'index']);
-        Route::post('/login', [LoginController::class,'login']);
-        Route::get('/forget-password', [LoginController::class,'forget']);
-        Route::post('/forget-check', [LoginController::class,'forgetCheck']);
-        Route::post('/reset-password', [LoginController::class,'resetPassword']);
+    Route::group(['middleware' => ['isGuest']], function () {
+        Route::get('', [LoginController::class, 'index']);
+        Route::get('/login', [LoginController::class, 'index']);
+        Route::post('/login', [LoginController::class, 'login']);
+        Route::get('/forget-password', [LoginController::class, 'forget']);
+        Route::post('/forget-check', [LoginController::class, 'forgetCheck']);
+        Route::post('/reset-password', [LoginController::class, 'resetPassword']);
     });
 
-    Route::group(['middleware' => ['isAdmin']],function(){
+    Route::group(['middleware' => ['isAdmin']], function () {
 
-        Route::get('dashboard', [DashboardController::class,'index']);
+        Route::get('dashboard', [DashboardController::class, 'index']);
 
-        Route::prefix('master')->group(function(){
-            Route::prefix('products')->group(function(){
-                Route::get('', [MasterController::class,'products']);
-                Route::get('edit/{id}', [MasterController::class,'productsEdit']);
-                Route::get('delete/{id}', [MasterController::class,'productsDelete']);
+        // Route::get('leads', [DashboardController::class, 'leads']);
+        Route::prefix('leads')->group(function () {
+            Route::get('active', [DashboardController::class, 'active']);
+            Route::get('customer', [DashboardController::class, 'customer']);
+            Route::get('deleted', [DashboardController::class, 'deleted']);
+        });
+        Route::prefix('master')->group(function () {
+            Route::prefix('products')->group(function () {
+                Route::get('', [MasterController::class, 'products']);
+                Route::get('edit/{id}', [MasterController::class, 'productsEdit']);
+                Route::get('delete/{id}', [MasterController::class, 'productsDelete']);
 
-                Route::post('save', [MasterController::class,'productsSave']);
-                Route::post('update', [MasterController::class,'productsUpdate']);
+                Route::post('save', [MasterController::class, 'productsSave']);
+                Route::post('update', [MasterController::class, 'productsUpdate']);
             });
 
-            Route::prefix('source')->group(function(){
-                Route::get('', [MasterController::class,'source']);
-                Route::get('edit/{id}', [MasterController::class,'sourceEdit']);
-                Route::get('delete/{id}', [MasterController::class,'sourceDelete']);
+            Route::prefix('source')->group(function () {
+                Route::get('', [MasterController::class, 'source']);
+                Route::get('edit/{id}', [MasterController::class, 'sourceEdit']);
+                Route::get('delete/{id}', [MasterController::class, 'sourceDelete']);
 
-                Route::post('save', [MasterController::class,'sourceSave']);
-                Route::post('update', [MasterController::class,'sourceUpdate']);
+                Route::post('save', [MasterController::class, 'sourceSave']);
+                Route::post('update', [MasterController::class, 'sourceUpdate']);
             });
         });
 
         // Common Routes
-        Route::prefix('users')->group(function(){
-            Route::get('', [UserController::class,'index']);
-            Route::get('create', [UserController::class,'create']);
-            Route::get('edit/{id}', [UserController::class,'edit']);
-            Route::get('delete/{id}', [UserController::class,'delete']);
-            Route::get('status/{id}/{status}', [UserController::class,'status']);
-            
-            Route::post('create', [UserController::class,'save']);
-            Route::post('edit', [UserController::class,'update']);
+        Route::prefix('users')->group(function () {
+            Route::get('', [UserController::class, 'index']);
+            Route::get('create', [UserController::class, 'create']);
+            Route::get('edit/{id}', [UserController::class, 'edit']);
+            Route::get('delete/{id}', [UserController::class, 'delete']);
+            Route::get('status/{id}/{status}', [UserController::class, 'status']);
+
+            Route::post('create', [UserController::class, 'save']);
+            Route::post('edit', [UserController::class, 'update']);
         });
 
-        Route::prefix('settings')->group(function(){
-            Route::get('', [SettingsController::class,'index']);
-            Route::post('', [SettingsController::class,'save']);
+        Route::prefix('settings')->group(function () {
+            Route::get('', [SettingsController::class, 'index']);
+            Route::post('', [SettingsController::class, 'save']);
         });
 
-        Route::prefix('profile')->group(function(){
-            Route::get('', [SettingsController::class,'profile']);
-            Route::post('save', [SettingsController::class,'profileSave']);
+        Route::prefix('profile')->group(function () {
+            Route::get('', [SettingsController::class, 'profile']);
+            Route::post('save', [SettingsController::class, 'profileSave']);
         });
 
-        Route::get('logout', [LoginController::class,'logout']);
+        Route::get('logout', [LoginController::class, 'logout']);
     });
-
 });
 Route::get('key:generate', function () {
     Artisan::call("key:generate");

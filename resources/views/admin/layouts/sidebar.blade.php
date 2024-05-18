@@ -38,6 +38,42 @@
                         </a>
                     </li>
 
+                    {{-- <li class="{{ AdminHelper::menu(2,['leads'])[2] }}">
+                        <a href="{{ CommonHelper::admin('leads') }}">
+                            <span class="pcoded-micon"><i class="feather icon-list"></i></span>
+                            <span class="pcoded-mtext">Leads</span>
+                        </a>
+                    </li> --}}
+
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="pcoded-hasmenu {{ AdminHelper::menu(2,['leads'])[2] }}">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="feather icon-list"></i></span>
+                                <span class="pcoded-mtext">Leads</span>
+                            </a>
+                            <ul class="pcoded-submenu">
+                                <li class="{{ AdminHelper::menu(3,['active'])[1] }}">
+                                    <a href="{{ CommonHelper::admin('leads/active') }}">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Active</span>
+                                    </a>
+                                </li>
+                                <li class="{{ AdminHelper::menu(3,['customer'])[1] }}">
+                                    <a href="{{ CommonHelper::admin('leads/customer') }}">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Customer</span>
+                                    </a>
+                                </li>
+                                <li class="{{ AdminHelper::menu(3,['deleted'])[1] }}">
+                                    <a href="{{ CommonHelper::admin('leads/deleted') }}">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Deleted</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
                     <div class="pcoded-navigatio-lavel">Master Settings</div>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="pcoded-hasmenu {{ AdminHelper::menu(2,['master'])[2] }}">
