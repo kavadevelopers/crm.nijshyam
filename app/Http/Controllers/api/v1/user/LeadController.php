@@ -63,6 +63,11 @@ class LeadController extends Controller
             ]);
         } else {
             $leads = LeadsModel::orderby('follow_up_date', 'asc')->with('source', 'product', 'lastfollowup');
+
+            if (Auth::guard('api-guard')->user()->role == '1') {
+                $leads->where('created_by', Auth::guard('api-guard')->user()->id);
+            }
+
             if ($request->status) {
                 $leads->where('status', $request->status);
             }
