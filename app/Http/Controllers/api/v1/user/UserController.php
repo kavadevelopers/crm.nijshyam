@@ -11,33 +11,38 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller{
+class UserController extends Controller
+{
 
-    public function followup(Request $request) : Response {
-        $leads = LeadsModel::where('follow_up_date','!=',NULL)->where('status','Active')->orderby('follow_up_date','asc')->with('source','product','lastfollowup');
-        if($request->search){
-            $leads->where('name', 'like', "%".$request->search."%")
-                    ->orWhere('mobile', 'like', "%".$request->search."%")
-                    ->orWhere('city', 'like', "%".$request->search."%")
-                    ->orWhere('address', 'like', "%".$request->search."%");
+    public function followup(Request $request): Response
+    {
+        $leads = LeadsModel::where('follow_up_date', '!=', NULL)->where('status', 'Active')->orderby('follow_up_date', 'asc')->with('source', 'product', 'lastfollowup');
+        if (Auth::guard('api-guard')->user()->role == '1') {
+            $leads->where('created_by', Auth::guard('api-guard')->user()->id);
         }
-        if($request->priority){
-            $leads->where('priority',$request->priority);
+        if ($request->search) {
+            $leads->where('name', 'like', "%" . $request->search . "%")
+                ->orWhere('mobile', 'like', "%" . $request->search . "%")
+                ->orWhere('city', 'like', "%" . $request->search . "%")
+                ->orWhere('address', 'like', "%" . $request->search . "%");
         }
-        if($request->source_id){
-            $leads->where('source_id',$request->source_id);
+        if ($request->priority) {
+            $leads->where('priority', $request->priority);
         }
-        if($request->product_id){
-            $leads->where('product_id',$request->product_id);
+        if ($request->source_id) {
+            $leads->where('source_id', $request->source_id);
+        }
+        if ($request->product_id) {
+            $leads->where('product_id', $request->product_id);
         }
         $total = $leads->count();
-        if($request->skip){
+        if ($request->skip) {
             $leads->skip($request->skip);
         }
-        if($request->take){
+        if ($request->take) {
             $leads->take($request->take);
         }
-        return CommonHelper::response('1',[
+        return CommonHelper::response('1', [
             'message'   => 'Home',
             'data'      => [
                 'total'     => $total,
@@ -46,32 +51,35 @@ class UserController extends Controller{
             'note'      => 'Pass take if you want to `take` records and `skip` for skip records'
         ]);
     }
-    
-    public function getUser() : Response {
+
+    public function getUser(): Response
+    {
         $user = Auth::guard('api-guard')->user();
-        return CommonHelper::response(1,[
+        return CommonHelper::response(1, [
             'message' => 'Profile Get',
             'data'    => $user
         ]);
     }
 
-    public function logout(Request $request) : Response {
+    public function logout(Request $request): Response
+    {
         $request->user()->currentAccessToken()->delete();
-        return CommonHelper::response(1,[
+        return CommonHelper::response(1, [
             'message' => 'Logout Done'
         ]);
-    }  
-    
-    public function acDelete(Request $request){
+    }
+
+    public function acDelete(Request $request)
+    {
 
         $user = UserAdminModel::find($request->user()->id);
-        if($user){
+        if ($user) {
             $user->is_deleted = '1';
             $user->save();
         }
 
         $request->user()->currentAccessToken()->delete();
-        return CommonHelper::response(1,[
+        return CommonHelper::response(1, [
             'message' => 'Your Account is Deleted'
         ]);
     }
