@@ -11,83 +11,85 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class LeadController extends Controller{
+class LeadController extends Controller
+{
 
-    function followup(Request $request) : Response {
-        if(!$request->lead_id){
-            return CommonHelper::response('0',['message' => '`lead_id` is reqiured.']);
-        }else if(!$request->type){
-            return CommonHelper::response('0',['message' => '`type` is reqiured.']);
-        }else if(!$request->status){
-            return CommonHelper::response('0',['message' => '`status` is reqiured.']);
-        }else{
+    function followup(Request $request): Response
+    {
+        if (!$request->lead_id) {
+            return CommonHelper::response('0', ['message' => '`lead_id` is reqiured.']);
+        } else if (!$request->type) {
+            return CommonHelper::response('0', ['message' => '`type` is reqiured.']);
+        } else if (!$request->status) {
+            return CommonHelper::response('0', ['message' => '`status` is reqiured.']);
+        } else {
             $lead = LeadsModel::find($request->lead_id);
-            if($lead){
+            if ($lead) {
                 $followup = new FollowUpModel;
                 $followup->lead_id              = $request->lead_id;
                 $followup->type                 = $request->type;
-                if($request->description){
+                if ($request->description) {
                     $followup->description      = $request->description;
-                }    
+                }
                 $followup->created_by       = Auth::guard('api-guard')->user()->id;
                 $followup->updated_by       = Auth::guard('api-guard')->user()->id;
-                $followup->save(); 
-                if($lead->status == 'Active'){
-                    if($request->follow_up_date){
+                $followup->save();
+                if ($lead->status == 'Active') {
+                    if ($request->follow_up_date) {
                         $lead->follow_up_date   = Carbon::parse($request->follow_up_date)->format('Y-m-d');
                     }
-                }else{
+                } else {
                     $lead->follow_up_date = NULL;
                 }
                 $lead->status           = $request->status;
                 $lead->updated_by       = Auth::guard('api-guard')->user()->id;
-                $lead->save();  
+                $lead->save();
             }
             $lead = LeadsModel::with('lastfollowup')->find($request->lead_id);
-            return CommonHelper::response('1',[
+            return CommonHelper::response('1', [
                 'message' => 'FollowUp Created',
                 'data'    => $lead
             ]);
-
-        }    
+        }
     }
-    
-    function list(Request $request):Response{
-        if($request->lead_id){
-            $lead = LeadsModel::where('id',$request->lead_id)->with('source','product','followups')->first();
-            return CommonHelper::response('1',[
+
+    function list(Request $request): Response
+    {
+        if ($request->lead_id) {
+            $lead = LeadsModel::where('id', $request->lead_id)->with('source', 'product', 'followups')->first();
+            return CommonHelper::response('1', [
                 'message'   => 'Lead View',
                 'data'      => $lead
             ]);
-        }else{
-            $leads = LeadsModel::orderby('id','asc')->with('source','product','lastfollowup');
-            if($request->status){
-                $leads->where('status',$request->status);
+        } else {
+            $leads = LeadsModel::orderby('follow_up_date', 'asc')->with('source', 'product', 'lastfollowup');
+            if ($request->status) {
+                $leads->where('status', $request->status);
             }
-            if($request->search){
-                $leads->where('name', 'like', "%".$request->search."%")
-                        ->orWhere('mobile', 'like', "%".$request->search."%")
-                        ->orWhere('city', 'like', "%".$request->search."%")
-                        ->orWhere('address', 'like', "%".$request->search."%");
+            if ($request->search) {
+                $leads->where('name', 'like', "%" . $request->search . "%")
+                    ->orWhere('mobile', 'like', "%" . $request->search . "%")
+                    ->orWhere('city', 'like', "%" . $request->search . "%")
+                    ->orWhere('address', 'like', "%" . $request->search . "%");
             }
-            if($request->priority){
-                $leads->where('priority',$request->priority);
+            if ($request->priority) {
+                $leads->where('priority', $request->priority);
             }
-            if($request->source_id){
-                $leads->where('source_id',$request->source_id);
+            if ($request->source_id) {
+                $leads->where('source_id', $request->source_id);
             }
-            if($request->product_id){
-                $leads->where('product_id',$request->product_id);
+            if ($request->product_id) {
+                $leads->where('product_id', $request->product_id);
             }
             $total = $leads->count();
-            if($request->skip){
+            if ($request->skip) {
                 $leads->skip($request->skip);
             }
-            if($request->take){
+            if ($request->take) {
                 $leads->take($request->take);
             }
-            
-            return CommonHelper::response('1',[
+
+            return CommonHelper::response('1', [
                 'message'   => 'Lead List',
                 'data'      => [
                     'total'     => $total,
@@ -98,22 +100,23 @@ class LeadController extends Controller{
         }
     }
 
-    function create(Request $request) : Response {
-        
+    function create(Request $request): Response
+    {
 
-        if(!$request->priority){
-            return CommonHelper::response('0',['message' => '`priority` is reqiured.']);
-        }else if(!$request->name){
-            return CommonHelper::response('0',['message' => '`name` is reqiured.']);
-        }else if(!$request->mobile){
-            return CommonHelper::response('0',['message' => '`mobile` is reqiured.']);
-        }else if(!$request->source_id){
-            return CommonHelper::response('0',['message' => '`source_id` is reqiured.']);
-        }else if(!$request->product_id){
-            return CommonHelper::response('0',['message' => '`product_id` is reqiured.']);
-        }else if(!$request->status){
-            return CommonHelper::response('0',['message' => '`status` is reqiured.']);
-        }else{
+
+        if (!$request->priority) {
+            return CommonHelper::response('0', ['message' => '`priority` is reqiured.']);
+        } else if (!$request->name) {
+            return CommonHelper::response('0', ['message' => '`name` is reqiured.']);
+        } else if (!$request->mobile) {
+            return CommonHelper::response('0', ['message' => '`mobile` is reqiured.']);
+        } else if (!$request->source_id) {
+            return CommonHelper::response('0', ['message' => '`source_id` is reqiured.']);
+        } else if (!$request->product_id) {
+            return CommonHelper::response('0', ['message' => '`product_id` is reqiured.']);
+        } else if (!$request->status) {
+            return CommonHelper::response('0', ['message' => '`status` is reqiured.']);
+        } else {
 
             $lead = new LeadsModel;
             $lead->priority         = $request->priority;
@@ -126,46 +129,46 @@ class LeadController extends Controller{
             $lead->city             = $request->city;
             $lead->address          = $request->address;
             $lead->description      = $request->description;
-            if($request->follow_up_date){
+            if ($request->follow_up_date) {
                 $lead->follow_up_date   = Carbon::parse($request->follow_up_date)->format('Y-m-d');
             }
             $lead->status           = $request->status;
             $lead->created_by       = Auth::guard('api-guard')->user()->id;
             $lead->updated_by       = Auth::guard('api-guard')->user()->id;
-            $lead->save();   
-            
+            $lead->save();
+
             $lead->lead_id          = CommonHelper::generateLeadId($lead->id);
             $lead->save();
 
-            return CommonHelper::response('1',[
+            return CommonHelper::response('1', [
                 'message' => 'Lead Created',
                 'data'    => $lead
             ]);
-
-        }    
+        }
     }
 
-    function update(Request $request) : Response {
-        
+    function update(Request $request): Response
+    {
 
-        if(!$request->lead_id){
-            return CommonHelper::response('0',['message' => '`lead_id` is reqiured.']);
-        }else if(!$request->priority){
-            return CommonHelper::response('0',['message' => '`priority` is reqiured.']);
-        }else if(!$request->name){
-            return CommonHelper::response('0',['message' => '`name` is reqiured.']);
-        }else if(!$request->mobile){
-            return CommonHelper::response('0',['message' => '`mobile` is reqiured.']);
-        }else if(!$request->source_id){
-            return CommonHelper::response('0',['message' => '`source_id` is reqiured.']);
-        }else if(!$request->product_id){
-            return CommonHelper::response('0',['message' => '`product_id` is reqiured.']);
-        }else if(!$request->status){
-            return CommonHelper::response('0',['message' => '`status` is reqiured.']);
-        }else{
+
+        if (!$request->lead_id) {
+            return CommonHelper::response('0', ['message' => '`lead_id` is reqiured.']);
+        } else if (!$request->priority) {
+            return CommonHelper::response('0', ['message' => '`priority` is reqiured.']);
+        } else if (!$request->name) {
+            return CommonHelper::response('0', ['message' => '`name` is reqiured.']);
+        } else if (!$request->mobile) {
+            return CommonHelper::response('0', ['message' => '`mobile` is reqiured.']);
+        } else if (!$request->source_id) {
+            return CommonHelper::response('0', ['message' => '`source_id` is reqiured.']);
+        } else if (!$request->product_id) {
+            return CommonHelper::response('0', ['message' => '`product_id` is reqiured.']);
+        } else if (!$request->status) {
+            return CommonHelper::response('0', ['message' => '`status` is reqiured.']);
+        } else {
 
             $lead = LeadsModel::find($request->lead_id);
-            if($lead){
+            if ($lead) {
                 $lead->priority         = $request->priority;
                 $lead->source_id        = $request->source_id;
                 $lead->product_id       = $request->product_id;
@@ -176,22 +179,21 @@ class LeadController extends Controller{
                 $lead->city             = $request->city;
                 $lead->address          = $request->address;
                 $lead->description      = $request->description;
-                if($request->follow_up_date){
+                if ($request->follow_up_date) {
                     $lead->follow_up_date   = Carbon::parse($request->follow_up_date)->format('Y-m-d');
                 }
                 $lead->status           = $request->status;
                 $lead->updated_by       = Auth::guard('api-guard')->user()->id;
-                $lead->save();   
-                
+                $lead->save();
+
                 $lead->lead_id          = CommonHelper::generateLeadId($lead->id);
                 $lead->save();
             }
 
-            return CommonHelper::response('1',[
+            return CommonHelper::response('1', [
                 'message' => 'Lead Updated',
                 'data'    => $lead
             ]);
-
-        }    
+        }
     }
 }
