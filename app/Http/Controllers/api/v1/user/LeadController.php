@@ -112,8 +112,6 @@ class LeadController extends Controller
 
     function create(Request $request): Response
     {
-
-
         if (!$request->priority) {
             return CommonHelper::response('0', ['message' => '`priority` is reqiured.']);
         } else if (!$request->label_id) {

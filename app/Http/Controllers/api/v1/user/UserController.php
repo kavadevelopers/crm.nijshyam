@@ -16,7 +16,8 @@ class UserController extends Controller
 
     public function followup(Request $request): Response
     {
-        $leads = LeadsModel::where('follow_up_date', '!=', NULL)->where('status', 'Active')->orderby('follow_up_date', 'asc')->with('source', 'product', 'lastfollowup', 'label');
+        $leads = LeadsModel::query();
+        $leads = $leads->where('follow_up_date', '!=', NULL)->orderby('follow_up_date', 'asc')->with('source', 'product', 'lastfollowup', 'label');
         if (Auth::guard('api-guard')->user()->role == '1') {
             $leads->where('created_by', Auth::guard('api-guard')->user()->id);
         }
@@ -38,6 +39,7 @@ class UserController extends Controller
         if ($request->label_id) {
             $leads->where('label_id', $request->label_id);
         }
+        $leads->where('status', '!=', 'Deleted');
         $total = $leads->count();
         if ($request->skip) {
             $leads->skip($request->skip);
