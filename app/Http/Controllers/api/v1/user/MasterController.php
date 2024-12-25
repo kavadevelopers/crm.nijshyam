@@ -27,19 +27,30 @@ class MasterController extends Controller
             $request->all(),
             [
                 'name' => 'required|string|max:255',
+                'label_id'  => 'optional',
             ]
         );
 
         if ($validation->fails()) {
             return CommonHelper::response(0, ['message' => $validation->errors()->first()]);
         }
-
-        $label = new LabelModel;
-        $label->name = $request->name;
-        $label->created_by = $request->user()->id;
-        $label->updated_by = $request->user()->id;
-        $label->save();
-
+        if ($request->has('label_id')) {
+            if ($request->label_id == '1') {
+                return CommonHelper::response(0, ['message' => 'Default label can not be edited']);
+            }
+            $label = LabelModel::find($request->label_id);
+            if ($label) {
+                $label->name = $request->name;
+                $label->updated_by = $request->user()->id;
+                $label->save();
+            }
+        } else {
+            $label = new LabelModel;
+            $label->name = $request->name;
+            $label->created_by = $request->user()->id;
+            $label->updated_by = $request->user()->id;
+            $label->save();
+        }
         $labels = LabelModel::where('is_deleted', '0')->orderby('id', 'asc')->get();
         return CommonHelper::response('1', [
             'message' => 'Label Created',
