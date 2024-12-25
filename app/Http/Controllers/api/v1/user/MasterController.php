@@ -34,6 +34,16 @@ class MasterController extends Controller
         if ($validation->fails()) {
             return CommonHelper::response(0, ['message' => $validation->errors()->first()]);
         }
+        $existingLabel = LabelModel::where('name', $request->name)
+            ->where('is_deleted', 0)
+            ->when($request->has('label_id'), function ($query) use ($request) {
+                return $query->where('id', '!=', $request->label_id);
+            })
+            ->first();
+
+        if ($existingLabel) {
+            return CommonHelper::response(0, ['message' => 'Label with this name already exists']);
+        }
         if ($request->has('label_id')) {
             if ($request->label_id == '1') {
                 return CommonHelper::response(0, ['message' => 'Default label can not be edited']);
