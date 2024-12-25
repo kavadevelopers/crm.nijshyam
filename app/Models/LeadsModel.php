@@ -10,6 +10,10 @@ class LeadsModel extends Model
 {
     use HasFactory;
 
+    public function label()
+    {
+        return $this->belongsTo(LabelModel::class, 'label_id');
+    }
     public function source()
     {
         return $this->belongsTo(MasterSourceModel::class, 'source_id');
@@ -34,6 +38,7 @@ class LeadsModel extends Model
     protected $table = 'leads';
 
     protected $fillable = [
+        'label_id',
         'priority',
         'source_id',
         'product_id',

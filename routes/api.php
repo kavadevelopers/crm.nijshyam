@@ -4,8 +4,10 @@ use App\Helpers\CommonHelper;
 use App\Http\Controllers\api\v1\AuthController as ApiAuthController;
 use App\Http\Controllers\api\v1\ConfigController as ApiConfigController;
 use App\Http\Controllers\api\v1\user\LeadController as ApiLeadController;
+use App\Http\Controllers\api\v1\user\MasterController;
 use App\Http\Controllers\api\v1\user\UserController as ApiUserController;
 use App\Http\Controllers\Controller;
+use App\Models\LabelModel as ApiLabelModel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,33 +25,39 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-route::get('',[Controller::class,'test']);
+route::get('', [Controller::class, 'test']);
 
-Route::middleware('auth.api.token')->group(function(){
-    Route::prefix('v1')->group(function(){
+Route::middleware('auth.api.token')->group(function () {
+    Route::prefix('v1')->group(function () {
 
-        Route::get('test',function(){
-            return CommonHelper::response(1,['sample' => 'Okay']);
+        Route::get('test', function () {
+            return CommonHelper::response(1, ['sample' => 'Okay']);
         });
 
-        Route::post('login',[ApiAuthController::class,'login']); 
-        
-        Route::middleware('auth:api-guard')->group(function(){
+        Route::post('login', [ApiAuthController::class, 'login']);
 
-            Route::get('followup', [ApiUserController::class,'followup']);
-            Route::get('profile',[ApiUserController::class,'getUser']); 
+        Route::middleware('auth:api-guard')->group(function () {
 
-            Route::prefix('leads')->group(function(){
-                Route::post('followup', [ApiLeadController::class,'followup']);
-                Route::post('create', [ApiLeadController::class,'create']);
-                Route::post('update', [ApiLeadController::class,'update']);
-                Route::get('list', [ApiLeadController::class,'list']);
+            Route::get('followup', [ApiUserController::class, 'followup']);
+            Route::get('profile', [ApiUserController::class, 'getUser']);
 
+            Route::prefix('leads')->group(function () {
+                Route::post('followup', [ApiLeadController::class, 'followup']);
+                Route::post('create', [ApiLeadController::class, 'create']);
+                Route::post('update', [ApiLeadController::class, 'update']);
+                Route::get('list', [ApiLeadController::class, 'list']);
             });
 
-            Route::post('logout',[ApiUserController::class,'logout']);   
-            Route::post('ac-delete',[ApiUserController::class,'acDelete']);   
-        });  
+            Route::prefix('label')->group(function () {
+                Route::get('list', [MasterController::class, 'labelList']);
+                Route::get('delete', [MasterController::class, 'labelDelete']);
+                Route::post('create', [MasterController::class, 'labelCreate']);
+                Route::post('update', [MasterController::class, 'labelUpdate']);
+            });
+
+            Route::post('logout', [ApiUserController::class, 'logout']);
+            Route::post('ac-delete', [ApiUserController::class, 'acDelete']);
+        });
 
         // Route::prefix('master')->group(function(){
         //     Route::prefix('sector')->group(function(){
@@ -85,6 +93,6 @@ Route::middleware('auth.api.token')->group(function(){
         //         route::get('',[ApiMasterController::class,'cityList']);
         //     });
         // });
-        Route::get('get-config',[ApiConfigController::class,'get']);
+        Route::get('get-config', [ApiConfigController::class, 'get']);
     });
 });

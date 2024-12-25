@@ -41,6 +41,7 @@ class LeadController extends Controller
                 } else {
                     $lead->follow_up_date = NULL;
                 }
+                $lead->label_id         = $request->label_id;
                 $lead->status           = $request->status;
                 $lead->updated_by       = Auth::guard('api-guard')->user()->id;
                 $lead->save();
@@ -56,21 +57,22 @@ class LeadController extends Controller
     function list(Request $request): Response
     {
         if ($request->lead_id) {
-            $lead = LeadsModel::where('id', $request->lead_id)->with('source', 'product', 'followups')->first();
+            $lead = LeadsModel::where('id', $request->lead_id)->with('source', 'product', 'followups', 'label')->first();
             return CommonHelper::response('1', [
                 'message'   => 'Lead View',
                 'data'      => $lead
             ]);
         } else {
-            $leads = LeadsModel::orderby('follow_up_date', 'asc')->with('source', 'product', 'lastfollowup');
+            $leads = LeadsModel::query();
+            $leads = $leads->orderby('id', 'asc')->with('source', 'product', 'lastfollowup', 'label');
 
             if (Auth::guard('api-guard')->user()->role == '1') {
                 $leads->where('created_by', Auth::guard('api-guard')->user()->id);
             }
 
-            if ($request->status) {
-                $leads->where('status', $request->status);
-            }
+            $leads->where('status', '!=', 'Deleted');
+            // if ($request->status) {
+            // }
             if ($request->search) {
                 $leads->where('name', 'like', "%" . $request->search . "%")
                     ->orWhere('mobile', 'like', "%" . $request->search . "%")
@@ -85,6 +87,9 @@ class LeadController extends Controller
             }
             if ($request->product_id) {
                 $leads->where('product_id', $request->product_id);
+            }
+            if ($request->label_id) {
+                $leads->where('label_id', $request->label_id);
             }
             $total = $leads->count();
             if ($request->skip) {
@@ -111,6 +116,8 @@ class LeadController extends Controller
 
         if (!$request->priority) {
             return CommonHelper::response('0', ['message' => '`priority` is reqiured.']);
+        } else if (!$request->label_id) {
+            return CommonHelper::response('0', ['message' => '`label_id` is reqiured.']);
         } else if (!$request->name) {
             return CommonHelper::response('0', ['message' => '`name` is reqiured.']);
         } else if (!$request->mobile) {
@@ -124,6 +131,7 @@ class LeadController extends Controller
         } else {
 
             $lead = new LeadsModel;
+            $lead->label_id         = $request->label_id;
             $lead->priority         = $request->priority;
             $lead->source_id        = $request->source_id;
             $lead->product_id       = $request->product_id;
@@ -158,6 +166,8 @@ class LeadController extends Controller
 
         if (!$request->lead_id) {
             return CommonHelper::response('0', ['message' => '`lead_id` is reqiured.']);
+        } else if (!$request->label_id) {
+            return CommonHelper::response('0', ['message' => '`label_id` is reqiured.']);
         } else if (!$request->priority) {
             return CommonHelper::response('0', ['message' => '`priority` is reqiured.']);
         } else if (!$request->name) {
@@ -171,9 +181,9 @@ class LeadController extends Controller
         } else if (!$request->status) {
             return CommonHelper::response('0', ['message' => '`status` is reqiured.']);
         } else {
-
             $lead = LeadsModel::find($request->lead_id);
             if ($lead) {
+                $lead->label_id         = $request->label_id;
                 $lead->priority         = $request->priority;
                 $lead->source_id        = $request->source_id;
                 $lead->product_id       = $request->product_id;
