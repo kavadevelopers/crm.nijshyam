@@ -64,7 +64,7 @@ class LeadController extends Controller
             ]);
         } else {
             $leads = LeadsModel::query();
-            $leads = $leads->orderby('id', 'asc')->with('source', 'product', 'lastfollowup', 'label');
+            $leads = $leads->orderby('id', 'desc')->with('source', 'product', 'lastfollowup', 'label');
 
             if (Auth::guard('api-guard')->user()->role == '1') {
                 $leads->where('created_by', Auth::guard('api-guard')->user()->id);
